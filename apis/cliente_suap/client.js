@@ -238,22 +238,14 @@ var Token = function(value, expirationTimeInSeconds, scope) {
     return registrationUrl;
   };
 
-  this.getResource = function(scope, callback) {
-  	$.ajax({
-		url: resourceURL,
-        data: {'scope': scope},
-        headers: {"Authorization": "Bearer " + token.getValue(),
-                  "Accept": "application/json"},
-		type: 'GET',
-		success: function(response) {
-			console.log(response);
-			callback(response);
-		},
-		error: function(response) {
-			alert('Falha na comunicação com o SUAP');
-            console.log(response);
-		}
-    });
+  this.getResource = async function() {
+    const dados = await fetch(resourceURL, {
+      headers: {"Authorization": "Bearer " + token.getValue(),
+        "Accept": "application/json"}
+    })
+    .then(dados => dados.json())
+    
+    return dados
   };
 
   this.login = function() {
